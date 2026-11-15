@@ -8,10 +8,8 @@
 //     key the simulated service takes, and the base path the entry joins to MAKEFUN_ENV_URL. A directory
 //     entry may give an absolute base_url instead of a path; joinBase takes either.
 //   - the quality table (`free-model-aggregator-01/ratings/v1`): each model's public rating in
-//     milli-points, what it can do (tools, vision, JSON mode, context length) and whether it is free. The
-//     scorer ranks an answer by its rating; a paid model is never a legal pick. This baseline reads the
-//     table's capability columns and free flag (the sealed truth, where a row exists) but never its
-//     rating (`--list` shows why in main.ts's header, and the routing TODO there names the gap).
+//     milli-points, what it can do (tools, vision, JSON mode, context length) and whether it is free.
+//     Routing uses the table's capabilities, free flag and rating; paid models are never legal picks.
 //   - the workload manifest (`free-model-aggregator-01/workload/v1`): the requests the client will send,
 //     in order, each with its api, whether it streams, its weight and the requirements a model must meet
 //     to serve it.
@@ -113,7 +111,7 @@ export interface WorkloadFile {
   manifest: WorkloadRequest[];
 }
 
-/** The brief as the baseline reads it. `error` is set when it could not be read at all. */
+/** The brief parsed from the prompt file. `error` is set when it could not be read. */
 export interface Brief {
   directory: ProviderDirectory;
   ratings: RatingsFile | null;
